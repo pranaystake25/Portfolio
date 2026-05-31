@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pranay Netha — Finance Reel Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #1e1e2e;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: rgba(201,168,76,0.12);
+    --text: #e8e6df;
+    --muted: #6b6a72;
+    --accent: #2a2a3a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.4rem 3rem;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 70% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+  }
+
+  .hero-grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  .hero-left {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 0.4rem 0.9rem;
+    border-radius: 2px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s ease forwards;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s ease forwards;
+  }
+
+  .hero-name span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.55s ease forwards;
+  }
+
+  .hero-desc {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: rgba(232,230,223,0.65);
+    max-width: 420px;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s ease forwards;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.85s ease forwards;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gold);
+    color: #0a0a0f;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.8rem;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+    cursor: none;
+  }
+  .btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201,168,76,0.25);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.8rem;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+    cursor: none;
+  }
+  .btn-outline:hover {
+    background: var(--gold-dim);
+    transform: translateY(-2px);
+  }
+
+  .hero-right {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 1s 1s ease forwards;
+  }
+
+  .hero-visual {
+    width: 340px;
+    height: 420px;
+    position: relative;
+  }
+
+  .phone-frame {
+    width: 200px;
+    height: 380px;
+    border: 2px solid rgba(201,168,76,0.3);
+    border-radius: 28px;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card);
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(201,168,76,0.08), inset 0 0 30px rgba(0,0,0,0.5);
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .phone-reel {
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .phone-reel::before {
+    content: '₹';
+    font-size: 3rem;
+    color: rgba(201,168,76,0.3);
+    font-family: 'Playfair Display', serif;
+  }
+
+  .reel-bar {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .reel-bar::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 60%;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: progress 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes progress {
+    from { width: 20%; }
+    to { width: 90%; }
+  }
+
+  .phone-stats {
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .stat-chip {
+    flex: 1;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 6px;
+    padding: 0.4rem;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--gold);
+  }
+
+  .stat-chip strong {
+    display: block;
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+  }
+
+  .floating-tag {
+    position: absolute;
+    background: var(--card);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--gold);
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  .float-1 {
+    top: 0; left: -20px;
+    animation: float1 4s ease-in-out infinite;
+  }
+  .float-2 {
+    bottom: 30px; right: -30px;
+    animation: float2 5s ease-in-out infinite;
+  }
+
+  @keyframes float1 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes float2 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 6rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .section-title em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  /* SERVICES */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    margin-top: 3rem;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .service-card {
+    background: var(--card);
+    padding: 2.5rem 2rem;
+    transition: background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover { background: #1a1a24; }
+
+  .service-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .service-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+  }
+
+  .service-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .service-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  /* PORTFOLIO */
+  .portfolio-note {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    margin-bottom: 3rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .portfolio-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: none;
+  }
+
+  .portfolio-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.2);
+  }
+
+  .portfolio-thumb {
+    aspect-ratio: 9/16;
+    background: linear-gradient(160deg, #12121e, #1e1e30);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .portfolio-thumb::after {
+    content: '▶';
+    font-size: 1.5rem;
+    color: rgba(201,168,76,0.5);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .portfolio-card:hover .portfolio-thumb::after { opacity: 1; }
+
+  .thumb-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: rgba(201,168,76,0.4);
+    text-align: center;
+    padding: 1rem;
+    text-transform: uppercase;
+  }
+
+  .portfolio-info {
+    padding: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .portfolio-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .portfolio-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    margin-top: 3rem;
+  }
+
+  .about-text p {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: rgba(232,230,223,0.7);
+    margin-bottom: 1.2rem;
+  }
+
+  .about-text strong { color: var(--text); font-weight: 500; }
+
+  .skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+  }
+
+  .skill-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.25);
+    padding: 0.35rem 0.8rem;
+    border-radius: 2px;
+    background: var(--gold-dim);
+    text-transform: uppercase;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .about-stat {
+    background: var(--card);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* CONTACT */
+  .contact-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 6rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 80% at 50% 50%, rgba(201,168,76,0.05) 0%, transparent 70%);
+  }
+
+  .contact-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .contact-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: all 0.25s;
+    cursor: none;
+  }
+
+  .contact-link:hover {
+    color: var(--gold);
+    border-color: rgba(201,168,76,0.4);
+    background: var(--gold-dim);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+  }
+
+  footer span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 auto;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+    .hero-right { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact-section { padding: 4rem 1.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Pranay Netha</div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-lines"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">Available for work</div>
+    <h1 class="hero-name">Pranay<br><span>Netha.</span></h1>
+    <p class="hero-role">Finance Reel Editor · DaVinci Resolve</p>
+    <p class="hero-desc">I edit short-form reels for Indian finance creators — sharp hooks, clean subtitles, fast pacing that keeps viewers watching till the end.</p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn-primary">Hire Me →</a>
+      <a href="#work" class="btn-outline">View Work</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="floating-tag float-1">📈 Finance Niche</div>
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-reel">
+            <div class="reel-bar"></div>
+          </div>
+          <div class="phone-stats">
+            <div class="stat-chip"><strong>60s</strong>Reel</div>
+            <div class="stat-chip"><strong>4K</strong>Export</div>
+            <div class="stat-chip"><strong>48h</strong>Turn</div>
+          </div>
+          <div style="width:100%; height:60px; background: rgba(201,168,76,0.04); border-radius:6px; border:1px solid rgba(201,168,76,0.1); display:flex; align-items:center; justify-content:center;">
+            <span style="font-family:'DM Mono',monospace; font-size:0.55rem; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase;">Color · Cuts · Captions</span>
+          </div>
+        </div>
+      </div>
+      <div class="floating-tag float-2">✦ Fast delivery</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What I offer</div>
+  <h2 class="section-title reveal">Editing that makes<br><em>finance content convert.</em></h2>
+
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-icon">✂️</div>
+      <div class="service-name">Single Reel Edit</div>
+      <p class="service-desc">One short-form reel, fully edited — hook, cuts, subtitles, SFX, color grade, and export-ready in 1080x1920.</p>
+      <div class="service-price">Starting ₹1,000 / reel</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📦</div>
+      <div class="service-name">Monthly Starter Pack</div>
+      <p class="service-desc">4 reels per month — ideal for creators posting 1x/week. Consistent delivery, consistent growth.</p>
+      <div class="service-price">₹3,500 / month</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🚀</div>
+      <div class="service-name">Monthly Retainer</div>
+      <p class="service-desc">10–12 reels per month for creators who post daily. Priority turnaround, dedicated editing system.</p>
+      <div class="service-price">₹8,000–12,000 / month</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PORTFOLIO -->
+<section id="work">
+  <div class="section-label">Portfolio</div>
+  <h2 class="section-title reveal">Recent <em>work.</em></h2>
+  <p class="portfolio-note reveal">↳ Samples available on request — add your YouTube/Drive links here as your portfolio grows</p>
+
+  <div class="portfolio-grid reveal">
+    <div class="portfolio-card">
+      <div class="portfolio-thumb">
+        <div class="thumb-label">Finance Reel<br>Sample #1</div>
+      </div>
+      <div class="portfolio-info">
+        <div class="portfolio-title">5 Money Mistakes in Your 20s</div>
+        <div class="portfolio-meta">Finance · 60s · Instagram Reel</div>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="portfolio-thumb">
+        <div class="thumb-label">Finance Reel<br>Sample #2</div>
+      </div>
+      <div class="portfolio-info">
+        <div class="portfolio-title">SIP vs FD — Which Wins?</div>
+        <div class="portfolio-meta">Finance · 45s · YouTube Short</div>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="portfolio-thumb">
+        <div class="thumb-label">Finance Reel<br>Sample #3</div>
+      </div>
+      <div class="portfolio-info">
+        <div class="portfolio-title">How to Start Investing at ₹500</div>
+        <div class="portfolio-meta">Finance · 55s · Instagram Reel</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About</div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <h2 class="section-title" style="margin-bottom:1.5rem;">Editing with<br><em>purpose.</em></h2>
+      <p>I'm Pranay Netha, a freelance short-form video editor based in India, specializing in content for <strong>finance creators, coaches, and personal brands.</strong></p>
+      <p>I work with <strong>DaVinci Resolve</strong> to craft reels that hold attention — fast hooks, rhythm-based cuts, clean subtitles, and color grades that feel premium without the noise.</p>
+      <p>My goal is simple: help finance creators <strong>show up consistently</strong> with content that looks professional, without spending hours on editing themselves.</p>
+      <div class="skills-list">
+        <span class="skill-tag">Fast Cuts</span>
+        <span class="skill-tag">Subtitles</span>
+        <span class="skill-tag">Color Grade</span>
+        <span class="skill-tag">SFX & Audio</span>
+        <span class="skill-tag">DaVinci Resolve</span>
+        <span class="skill-tag">Fusion</span>
+        <span class="skill-tag">Text Animation</span>
+        <span class="skill-tag">1080p Export</span>
+      </div>
+    </div>
+
+    <div class="about-stats reveal">
+      <div class="about-stat">
+        <span class="stat-number">48h</span>
+        <span class="stat-label">Max Turnaround</span>
+      </div>
+      <div class="about-stat">
+        <span class="stat-number">∞</span>
+        <span class="stat-label">Finance Niche</span>
+      </div>
+      <div class="about-stat">
+        <span class="stat-number">4K</span>
+        <span class="stat-label">Export Quality</span>
+      </div>
+      <div class="about-stat">
+        <span class="stat-number">2×</span>
+        <span class="stat-label">Revision Rounds</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="section-label" style="justify-content:center;">Get in touch</div>
+    <h2 class="section-title reveal" style="margin-bottom:0.8rem;">Ready to grow your<br><em>finance channel?</em></h2>
+    <p style="color:var(--muted); font-size:0.9rem; line-height:1.7;" class="reveal">Send me your raw footage or a reference reel. I'll deliver a clean, punchy edit within 48 hours — first one on me.</p>
+
+    <div class="contact-links reveal">
+      <a href="mailto:pranaystake25@gmail.com" class="contact-link">
+        ✉ pranaystake25@gmail.com
+      </a>
+      <a href="https://instagram.com/pranaystake" target="_blank" class="contact-link">
+        ◈ @pranaystake
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Pranay Netha — Finance Reel Editor</span>
+  <span>Built to get hired.</span>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.transform = 'translate(-50%, -50%) scale(1.6)';
+      ring.style.borderColor = 'rgba(201,168,76,0.7)';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.transform = 'translate(-50%, -50%) scale(1)';
+      ring.style.borderColor = 'rgba(201,168,76,0.4)';
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
