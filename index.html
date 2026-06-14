@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pranay Netha — Finance Reel Editor</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0f;
     --surface: #111118;
     --card: #16161f;
     --border: #1e1e2e;
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --gold-dim: rgba(201,168,76,0.12);
+    --gold: #4caf7d;
+    --gold-light: #6fc99c;
+    --gold-dim: rgba(76,175,125,0.12);
     --text: #e8e6df;
     --muted: #6b6a72;
     --accent: #2a2a3a;
@@ -46,7 +46,7 @@
   .cursor-ring {
     position: fixed;
     width: 36px; height: 36px;
-    border: 1px solid rgba(201,168,76,0.4);
+    border: 1px solid rgba(76,175,125,0.4);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9998;
@@ -119,16 +119,16 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 60% 60% at 70% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+      radial-gradient(ellipse 60% 60% at 70% 50%, rgba(76,175,125,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(76,175,125,0.04) 0%, transparent 60%);
   }
 
   .hero-grid-lines {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      linear-gradient(rgba(76,175,125,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(76,175,125,0.04) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
   }
@@ -147,7 +147,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--gold);
-    border: 1px solid rgba(201,168,76,0.3);
+    border: 1px solid rgba(76,175,125,0.3);
     padding: 0.4rem 0.9rem;
     border-radius: 2px;
     margin-bottom: 2rem;
@@ -169,7 +169,7 @@
   }
 
   .hero-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Fraunces', serif;
     font-size: clamp(3.5rem, 6vw, 5.5rem);
     font-weight: 900;
     line-height: 1;
@@ -231,14 +231,14 @@
   .btn-primary:hover {
     background: var(--gold-light);
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(201,168,76,0.25);
+    box-shadow: 0 8px 30px rgba(76,175,125,0.25);
   }
 
   .btn-outline {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    border: 1px solid rgba(201,168,76,0.4);
+    border: 1px solid rgba(76,175,125,0.4);
     color: var(--gold);
     font-family: 'DM Mono', monospace;
     font-size: 0.72rem;
@@ -275,7 +275,7 @@
   .phone-frame {
     width: 200px;
     height: 380px;
-    border: 2px solid rgba(201,168,76,0.3);
+    border: 2px solid rgba(76,175,125,0.3);
     border-radius: 28px;
     position: absolute;
     top: 20px;
@@ -283,7 +283,7 @@
     transform: translateX(-50%);
     background: var(--card);
     overflow: hidden;
-    box-shadow: 0 0 60px rgba(201,168,76,0.08), inset 0 0 30px rgba(0,0,0,0.5);
+    box-shadow: 0 0 60px rgba(76,175,125,0.08), inset 0 0 30px rgba(0,0,0,0.5);
   }
 
   .phone-screen {
@@ -312,8 +312,8 @@
   .phone-reel::before {
     content: '₹';
     font-size: 3rem;
-    color: rgba(201,168,76,0.3);
-    font-family: 'Playfair Display', serif;
+    color: rgba(76,175,125,0.3);
+    font-family: 'Fraunces', serif;
   }
 
   .reel-bar {
@@ -350,8 +350,8 @@
 
   .stat-chip {
     flex: 1;
-    background: rgba(201,168,76,0.08);
-    border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(76,175,125,0.08);
+    border: 1px solid rgba(76,175,125,0.15);
     border-radius: 6px;
     padding: 0.4rem;
     text-align: center;
@@ -369,7 +369,7 @@
   .floating-tag {
     position: absolute;
     background: var(--card);
-    border: 1px solid rgba(201,168,76,0.25);
+    border: 1px solid rgba(76,175,125,0.25);
     border-radius: 8px;
     padding: 0.6rem 0.9rem;
     font-family: 'DM Mono', monospace;
@@ -432,7 +432,7 @@
   }
 
   .section-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Fraunces', serif;
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 700;
     line-height: 1.15;
@@ -482,7 +482,7 @@
   }
 
   .service-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Fraunces', serif;
     font-size: 1.15rem;
     font-weight: 700;
     margin-bottom: 0.7rem;
@@ -530,7 +530,7 @@
 
   .portfolio-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.2);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(76,175,125,0.2);
   }
 
   .portfolio-thumb {
@@ -546,7 +546,7 @@
   .portfolio-thumb::after {
     content: '▶';
     font-size: 1.5rem;
-    color: rgba(201,168,76,0.5);
+    color: rgba(76,175,125,0.5);
     position: absolute;
     inset: 0;
     display: flex;
@@ -563,7 +563,7 @@
     font-family: 'DM Mono', monospace;
     font-size: 0.6rem;
     letter-spacing: 0.1em;
-    color: rgba(201,168,76,0.4);
+    color: rgba(76,175,125,0.4);
     text-align: center;
     padding: 1rem;
     text-transform: uppercase;
@@ -575,7 +575,7 @@
   }
 
   .portfolio-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Fraunces', serif;
     font-size: 0.9rem;
     margin-bottom: 0.3rem;
   }
@@ -618,7 +618,7 @@
     font-size: 0.65rem;
     letter-spacing: 0.08em;
     color: var(--gold);
-    border: 1px solid rgba(201,168,76,0.25);
+    border: 1px solid rgba(76,175,125,0.25);
     padding: 0.35rem 0.8rem;
     border-radius: 2px;
     background: var(--gold-dim);
@@ -640,7 +640,7 @@
   }
 
   .stat-number {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Fraunces', serif;
     font-size: 2.5rem;
     font-weight: 900;
     color: var(--gold);
@@ -671,7 +671,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse 50% 80% at 50% 50%, rgba(201,168,76,0.05) 0%, transparent 70%);
+    background: radial-gradient(ellipse 50% 80% at 50% 50%, rgba(76,175,125,0.05) 0%, transparent 70%);
   }
 
   .contact-inner {
@@ -708,7 +708,7 @@
 
   .contact-link:hover {
     color: var(--gold);
-    border-color: rgba(201,168,76,0.4);
+    border-color: rgba(76,175,125,0.4);
     background: var(--gold-dim);
   }
 
@@ -803,39 +803,39 @@
             <span style="font-family:'DM Mono',monospace; font-size:0.5rem; color:var(--muted);">May 2026</span>
           </div>
           <div style="text-align:center; padding:6px 0 2px; width:100%;">
-            <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--gold); line-height:1;">2.4M</div>
+            <div style="font-family:'Fraunces',serif; font-size:2rem; font-weight:900; color:var(--gold); line-height:1;">2.4M</div>
             <div style="font-family:'DM Mono',monospace; font-size:0.5rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-top:2px;">Total views</div>
           </div>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; width:100%;">
             <div style="background:#1a1a24; border-radius:6px; padding:7px 8px; border:1px solid #1e1e2e;">
-              <div style="font-family:'Playfair Display',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">94%</div>
+              <div style="font-family:'Fraunces',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">94%</div>
               <div style="font-family:'DM Mono',monospace; font-size:0.45rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-top:1px;">Retention</div>
               <div style="font-family:'DM Mono',monospace; font-size:0.45rem; color:#4caf7d; margin-top:2px;">↑ +12%</div>
             </div>
             <div style="background:#1a1a24; border-radius:6px; padding:7px 8px; border:1px solid #1e1e2e;">
-              <div style="font-family:'Playfair Display',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">48h</div>
+              <div style="font-family:'Fraunces',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">48h</div>
               <div style="font-family:'DM Mono',monospace; font-size:0.45rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-top:1px;">Delivery</div>
               <div style="font-family:'DM Mono',monospace; font-size:0.45rem; color:var(--gold); margin-top:2px;">On time</div>
             </div>
             <div style="background:#1a1a24; border-radius:6px; padding:7px 8px; border:1px solid #1e1e2e;">
-              <div style="font-family:'Playfair Display',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">180K</div>
+              <div style="font-family:'Fraunces',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">87K</div>
               <div style="font-family:'DM Mono',monospace; font-size:0.45rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-top:1px;">Avg views</div>
               <div style="font-family:'DM Mono',monospace; font-size:0.45rem; color:#4caf7d; margin-top:2px;">↑ +34%</div>
             </div>
             <div style="background:#1a1a24; border-radius:6px; padding:7px 8px; border:1px solid #1e1e2e;">
-              <div style="font-family:'Playfair Display',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">5/5</div>
+              <div style="font-family:'Fraunces',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">5/5</div>
               <div style="font-family:'DM Mono',monospace; font-size:0.45rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-top:1px;">Satisfaction</div>
               <div style="font-family:'DM Mono',monospace; font-size:0.45rem; color:var(--gold); margin-top:2px;">★★★★★</div>
             </div>
           </div>
           <div style="display:flex; align-items:flex-end; gap:3px; height:36px; width:100%; padding:0 2px;">
-            <div style="flex:1; height:45%; background:rgba(201,168,76,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(201,168,76,0.3);"></div>
-            <div style="flex:1; height:60%; background:rgba(201,168,76,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(201,168,76,0.3);"></div>
-            <div style="flex:1; height:40%; background:rgba(201,168,76,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(201,168,76,0.3);"></div>
-            <div style="flex:1; height:75%; background:rgba(201,168,76,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(201,168,76,0.3);"></div>
-            <div style="flex:1; height:90%; background:rgba(201,168,76,0.4); border-radius:2px 2px 0 0; border-top:1px solid var(--gold);"></div>
-            <div style="flex:1; height:65%; background:rgba(201,168,76,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(201,168,76,0.3);"></div>
-            <div style="flex:1; height:100%; background:rgba(201,168,76,0.4); border-radius:2px 2px 0 0; border-top:1px solid var(--gold);"></div>
+            <div style="flex:1; height:45%; background:rgba(76,175,125,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(76,175,125,0.3);"></div>
+            <div style="flex:1; height:60%; background:rgba(76,175,125,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(76,175,125,0.3);"></div>
+            <div style="flex:1; height:40%; background:rgba(76,175,125,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(76,175,125,0.3);"></div>
+            <div style="flex:1; height:75%; background:rgba(76,175,125,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(76,175,125,0.3);"></div>
+            <div style="flex:1; height:90%; background:rgba(76,175,125,0.4); border-radius:2px 2px 0 0; border-top:1px solid var(--gold);"></div>
+            <div style="flex:1; height:65%; background:rgba(76,175,125,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(76,175,125,0.3);"></div>
+            <div style="flex:1; height:100%; background:rgba(76,175,125,0.4); border-radius:2px 2px 0 0; border-top:1px solid var(--gold);"></div>
           </div>
         </div>
       </div>
@@ -1037,11 +1037,11 @@
   document.querySelectorAll('a, button').forEach(el => {
     el.addEventListener('mouseenter', () => {
       ring.style.transform = 'translate(-50%, -50%) scale(1.6)';
-      ring.style.borderColor = 'rgba(201,168,76,0.7)';
+      ring.style.borderColor = 'rgba(76,175,125,0.7)';
     });
     el.addEventListener('mouseleave', () => {
       ring.style.transform = 'translate(-50%, -50%) scale(1)';
-      ring.style.borderColor = 'rgba(201,168,76,0.4)';
+      ring.style.borderColor = 'rgba(76,175,125,0.4)';
     });
   });
 
