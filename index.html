@@ -4,1059 +4,314 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pranay Netha — Finance Reel Editor</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --card: #16161f;
-    --border: #1e1e2e;
-    --gold: #4caf7d;
-    --gold-light: #6fc99c;
-    --gold-dim: rgba(76,175,125,0.12);
-    --text: #e8e6df;
-    --muted: #6b6a72;
-    --accent: #2a2a3a;
+    --bg: #07080a;
+    --surface: #0d0f12;
+    --card: #111418;
+    --card2: #161a1f;
+    --border: #1c2128;
+    --border2: #252c35;
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.10);
+    --green-glow: rgba(34,197,94,0.18);
+    --amber: #22c55e; /* Changed yellow text color to match green */
+    --amber-dim: rgba(34,197,94,0.10); /* Changed yellow background to green tint */
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #475569;
+    --white: #f8fafc;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
 
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 300;
     overflow-x: hidden;
     cursor: none;
   }
 
-  /* Custom cursor */
-  .cursor {
-    position: fixed;
-    width: 10px; height: 10px;
-    background: var(--gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease;
-  }
-  .cursor-ring {
-    position: fixed;
-    width: 36px; height: 36px;
-    border: 1px solid rgba(76,175,125,0.4);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: all 0.15s ease;
-  }
+  /* ── CURSOR ── */
+  #cur  { position:fixed; width:8px; height:8px; background:var(--green); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
+  #ring { position:fixed; width:34px; height:34px; border:1px solid rgba(34,197,94,0.35); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:all 0.14s ease; }
 
-  /* Grain overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 100;
-    opacity: 0.6;
-  }
-
-  /* NAV */
+  /* ── NAV ── */
   nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.4rem 3rem;
-    background: rgba(10,10,15,0.85);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1.25rem 3.5rem;
+    background:rgba(7,8,10,0.88);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
   }
-
   .nav-logo {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-    text-transform: uppercase;
+    display:flex; align-items:center; gap:0.7rem;
+    font-family:'DM Mono',monospace; font-size:0.72rem;
+    letter-spacing:0.18em; text-transform:uppercase; color:var(--green);
   }
-
-  .nav-links {
-    display: flex;
-    gap: 2.5rem;
-    list-style: none;
+  .logo-dot { width:7px; height:7px; background:var(--green); border-radius:50%; animation:pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.35;transform:scale(0.65)} }
+  .nav-links { display:flex; gap:2.5rem; list-style:none; }
+  .nav-links a { font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--text3); text-decoration:none; transition:color 0.2s; }
+  .nav-links a:hover { color:var(--green); }
+  .nav-cta {
+    font-family:'DM Mono',monospace; font-size:0.68rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase;
+    background:var(--green); color:#07080a; padding:0.55rem 1.3rem; border-radius:3px; text-decoration:none; transition:opacity 0.2s;
+    cursor:none;
   }
+  .nav-cta:hover { opacity:0.88; }
 
-  .nav-links a {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--gold); }
-
-  /* HERO */
+  /* ── HERO ── */
   .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    padding: 8rem 3rem 4rem;
-    position: relative;
-    overflow: hidden;
+    min-height:100vh; display:grid; grid-template-columns:1fr 1fr;
+    align-items:center; padding:9rem 3.5rem 5rem; position:relative; overflow:hidden; gap:4rem;
   }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
+  .hero-glow {
+    position:absolute; inset:0; pointer-events:none;
     background:
-      radial-gradient(ellipse 60% 60% at 70% 50%, rgba(76,175,125,0.06) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(76,175,125,0.04) 0%, transparent 60%);
+      radial-gradient(ellipse 55% 65% at 72% 48%, rgba(34,197,94,0.05) 0%, transparent 65%),
+      radial-gradient(ellipse 35% 45% at 15% 80%, rgba(245,158,11,0.03) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position:absolute; inset:0; pointer-events:none;
+    background-image: linear-gradient(rgba(34,197,94,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.03) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 85% 85% at 50% 50%, black 20%, transparent 100%);
   }
 
-  .hero-grid-lines {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(76,175,125,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(76,175,125,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
-  }
+  .hero-left { position:relative; z-index:2; }
 
-  .hero-left {
-    position: relative;
-    z-index: 2;
+  .hero-eyebrow {
+    display:inline-flex; align-items:center; gap:0.55rem;
+    font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--green); border:1px solid rgba(34,197,94,0.28); padding:0.38rem 0.9rem; border-radius:2px;
+    margin-bottom:1.8rem; opacity:0; animation:up 0.7s 0.15s ease forwards;
   }
-
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold);
-    border: 1px solid rgba(76,175,125,0.3);
-    padding: 0.4rem 0.9rem;
-    border-radius: 2px;
-    margin-bottom: 2rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s ease forwards;
-  }
-
-  .hero-tag::before {
-    content: '';
-    width: 6px; height: 6px;
-    background: var(--gold);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.7); }
-  }
+  .eyebrow-dot { width:5px; height:5px; background:var(--green); border-radius:50%; animation:pulse 2s infinite; }
 
   .hero-name {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(3.5rem, 6vw, 5.5rem);
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.4rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.4s ease forwards;
+    font-family:'Fraunces',serif; font-size:clamp(3.2rem,5.5vw,5rem);
+    font-weight:900; line-height:1.02; letter-spacing:-0.025em; margin-bottom:0.3rem;
+    opacity:0; animation:up 0.7s 0.32s ease forwards;
   }
+  .hero-name .accent { color:var(--green); font-style:italic; font-weight:700; }
 
-  .hero-name span {
-    color: var(--gold);
-    font-style: italic;
-  }
-
-  .hero-role {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    margin-bottom: 2rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.55s ease forwards;
+  .hero-title {
+    font-family:'DM Mono',monospace; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text3);
+    margin-bottom:1.8rem; opacity:0; animation:up 0.7s 0.46s ease forwards;
   }
 
   .hero-desc {
-    font-size: 1.05rem;
-    line-height: 1.75;
-    color: rgba(232,230,223,0.65);
-    max-width: 420px;
-    margin-bottom: 2.5rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.7s ease forwards;
+    font-size:1rem; line-height:1.82; color:rgba(226,232,240,0.62); max-width:430px;
+    margin-bottom:2.2rem; opacity:0; animation:up 0.7s 0.6s ease forwards;
   }
+  .hero-desc strong { color:var(--text); font-weight:500; }
 
-  .hero-cta {
-    display: flex;
-    gap: 1rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.85s ease forwards;
+  /* ── proof bar ── */
+  .proof-bar {
+    display:flex; align-items:center; gap:1.8rem; margin-bottom:2.4rem;
+    opacity:0; animation:up 0.7s 0.72s ease forwards;
   }
+  .proof-item { display:flex; flex-direction:column; gap:2px; }
+  .proof-num { font-family:'Fraunces',serif; font-size:1.5rem; font-weight:900; color:var(--green); line-height:1; }
+  .proof-lbl { font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--text3); }
+  .proof-divider { width:1px; height:36px; background:var(--border2); }
 
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--gold);
-    color: #0a0a0f;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 0.85rem 1.8rem;
-    text-decoration: none;
-    border-radius: 2px;
-    transition: all 0.25s ease;
-    cursor: none;
+  .hero-cta { display:flex; gap:1rem; opacity:0; animation:up 0.7s 0.84s ease forwards; }
+  .btn-fill {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    background:var(--green); color:#07080a;
+    font-family:'DM Mono',monospace; font-size:0.7rem; font-weight:500; letter-spacing:0.14em; text-transform:uppercase;
+    padding:0.88rem 1.9rem; text-decoration:none; border-radius:3px; transition:all 0.22s; cursor:none;
   }
-  .btn-primary:hover {
-    background: var(--gold-light);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(76,175,125,0.25);
+  .btn-fill:hover { opacity:0.88; transform:translateY(-2px); box-shadow:0 10px 32px rgba(34,197,94,0.22); }
+  .btn-ghost {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    border:1px solid var(--border2); color:var(--text2);
+    font-family:'DM Mono',monospace; font-size:0.7rem; font-weight:400; letter-spacing:0.14em; text-transform:uppercase;
+    padding:0.88rem 1.9rem; text-decoration:none; border-radius:3px; transition:all 0.22s; cursor:none;
   }
+  .btn-ghost:hover { border-color:rgba(34,197,94,0.35); color:var(--green); background:var(--green-dim); transform:translateY(-2px); }
 
-  .btn-outline {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    border: 1px solid rgba(76,175,125,0.4);
-    color: var(--gold);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    font-weight: 400;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 0.85rem 1.8rem;
-    text-decoration: none;
-    border-radius: 2px;
-    transition: all 0.25s ease;
-    cursor: none;
-  }
-  .btn-outline:hover {
-    background: var(--gold-dim);
-    transform: translateY(-2px);
-  }
+  @keyframes up   { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:none} }
+  @keyframes fade { from{opacity:0} to{opacity:1} }
 
-  .hero-right {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    animation: fadeIn 1s 1s ease forwards;
-  }
-
-  .hero-visual {
-    width: 340px;
-    height: 420px;
-    position: relative;
-  }
-
+  /* ── PHONE MOCK ── */
+  .hero-right { position:relative; z-index:2; display:flex; align-items:center; justify-content:center; opacity:0; animation:fade 0.9s 1s ease forwards; }
+  .phone-wrap { position:relative; width:290px; }
   .phone-frame {
-    width: 200px;
-    height: 380px;
-    border: 2px solid rgba(76,175,125,0.3);
-    border-radius: 28px;
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--card);
-    overflow: hidden;
-    box-shadow: 0 0 60px rgba(76,175,125,0.08), inset 0 0 30px rgba(0,0,0,0.5);
+    width:218px; margin:0 auto; background:var(--card); border-radius:36px;
+    border:2px solid rgba(34,197,94,0.22); overflow:hidden; position:relative;
+    box-shadow:0 0 80px rgba(34,197,94,0.07), 0 40px 80px rgba(0,0,0,0.6);
   }
-
-  .phone-screen {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1.5rem;
+  .phone-notch {
+    width:72px; height:22px; background:#07080a; border-radius:0 0 14px 14px;
+    margin:0 auto 0; position:relative; z-index:2;
   }
+  .phone-body { padding:10px 12px 18px; display:flex; flex-direction:column; gap:8px; }
 
-  .phone-reel {
-    width: 100%;
-    height: 140px;
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    border-radius: 8px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* creator card inside phone */
+  .creator-card {
+    background:var(--card2); border:1px solid var(--border); border-radius:10px;
+    padding:10px; display:flex; align-items:center; gap:9px;
   }
-
-  .phone-reel::before {
-    content: '₹';
-    font-size: 3rem;
-    color: rgba(76,175,125,0.3);
-    font-family: 'Fraunces', serif;
+  .creator-avatar {
+    width:34px; height:34px; border-radius:50%; flex-shrink:0;
+    background:linear-gradient(135deg,#1e3a2f,#0f2d1a);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-size:0.85rem; color:var(--green); font-weight:700; border:1px solid rgba(34,197,94,0.25);
   }
+  .creator-name { font-size:0.72rem; font-weight:500; color:var(--text); line-height:1.2; }
+  .creator-sub  { font-family:'DM Mono',monospace; font-size:0.52rem; letter-spacing:0.08em; color:var(--text3); text-transform:uppercase; margin-top:2px; }
+  .verified { color:var(--green); font-size:0.68rem; margin-left:3px; }
 
-  .reel-bar {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
-    height: 3px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 2px;
-    overflow: hidden;
+  /* reel preview */
+  .reel-preview {
+    background:linear-gradient(160deg,#0d1f17,#0a1610);
+    border-radius:10px; border:1px solid var(--border);
+    height:118px; display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden;
   }
-
-  .reel-bar::after {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 60%;
-    background: var(--gold);
-    border-radius: 2px;
-    animation: progress 3s ease-in-out infinite alternate;
+  .reel-overlay-text {
+    font-family:'Fraunces',serif; font-size:1.25rem; font-weight:900; color:rgba(34,197,94,0.18);
+    text-align:center; line-height:1.1; user-select:none;
   }
-
-  @keyframes progress {
-    from { width: 20%; }
-    to { width: 90%; }
+  .reel-caption {
+    position:absolute; bottom:0; left:0; right:0;
+    background:rgba(34,197,94,0.92); padding:5px 8px;
+    font-family:'DM Mono',monospace; font-size:0.58rem; font-weight:500;
+    letter-spacing:0.06em; color:#07080a; text-align:center;
+    animation:captionflash 4s ease-in-out infinite;
   }
-
-  .phone-stats {
-    width: 100%;
-    display: flex;
-    gap: 0.5rem;
+  @keyframes captionflash {
+    0%,15%{opacity:1} 40%,55%{opacity:0.2} 70%,100%{opacity:1}
   }
+  .reel-progress { height:3px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
+  .reel-progress-fill { height:100%; background:var(--green); border-radius:2px; animation:prog 3s ease-in-out infinite alternate; }
+  @keyframes prog { from{width:18%} to{width:92%} }
 
-  .stat-chip {
-    flex: 1;
-    background: rgba(76,175,125,0.08);
-    border: 1px solid rgba(76,175,125,0.15);
-    border-radius: 6px;
-    padding: 0.4rem;
-    text-align: center;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.55rem;
-    color: var(--gold);
+  /* metrics row */
+  .metrics-row { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  .metric-chip {
+    background:var(--card2); border:1px solid var(--border); border-radius:8px;
+    padding:7px 6px; text-align:center;
   }
+  .metric-val { font-family:'Fraunces',serif; font-size:0.9rem; font-weight:700; color:var(--text); line-height:1; }
+  .metric-lbl { font-family:'DM Mono',monospace; font-size:0.48rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text3); margin-top:2px; }
+  .metric-delta { font-family:'DM Mono',monospace; font-size:0.48rem; color:var(--green); margin-top:2px; }
 
-  .stat-chip strong {
-    display: block;
-    font-size: 0.75rem;
-    margin-bottom: 2px;
+  /* mini bar chart */
+  .bars {
+    display:flex; align-items:flex-end; gap:3px; height:32px; padding:0 2px;
+    background:var(--card2); border:1px solid var(--border); border-radius:8px; overflow:hidden;
   }
+  .bar { flex:1; border-radius:2px 2px 0 0; transition:opacity 0.3s; }
 
-  .floating-tag {
-    position: absolute;
-    background: var(--card);
-    border: 1px solid rgba(76,175,125,0.25);
-    border-radius: 8px;
-    padding: 0.6rem 0.9rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--gold);
-    white-space: nowrap;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  /* floating tags */
+  .ftag {
+    position:absolute; background:var(--card); border:1px solid var(--border2); border-radius:8px;
+    padding:0.5rem 0.85rem; font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.08em;
+    color:var(--text2); white-space:nowrap; box-shadow:0 6px 24px rgba(0,0,0,0.5);
   }
+  .ftag-1 { top:-12px; left:-30px; animation:fl1 4.5s ease-in-out infinite; }
+  .ftag-2 { bottom:20px; right:-42px; animation:fl2 5.2s ease-in-out infinite; }
+  @keyframes fl1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+  @keyframes fl2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
 
-  .float-1 {
-    top: 0; left: -20px;
-    animation: float1 4s ease-in-out infinite;
+  /* ── DIVIDER ── */
+  .rule { width:100%; height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent); }
+
+  /* ── SECTIONS ── */
+  .section { padding:6rem 3.5rem; max-width:1160px; margin:0 auto; }
+
+  .eyebrow-sm {
+    display:flex; align-items:center; gap:0.75rem;
+    font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--green);
+    margin-bottom:1rem;
   }
-  .float-2 {
-    bottom: 30px; right: -30px;
-    animation: float2 5s ease-in-out infinite;
+  .eyebrow-sm::before { content:''; width:28px; height:1px; background:var(--green); }
+
+  .section-h {
+    font-family:'Fraunces',serif; font-size:clamp(1.8rem,3.5vw,2.7rem);
+    font-weight:700; line-height:1.18; margin-bottom:0.85rem;
   }
+  .section-h em { color:var(--green); font-style:italic; }
 
-  @keyframes float1 {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+  .section-sub { font-size:0.95rem; line-height:1.78; color:rgba(226,232,240,0.56); max-width:520px; }
+
+  /* ── WHAT FINANCE CREATORS NEED ── */
+  .needs-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5px; margin-top:3rem; background:var(--border); border:1px solid var(--border); }
+  .need-card {
+    background:var(--card); padding:2.2rem 2rem; position:relative; overflow:hidden;
+    transition:background 0.22s;
   }
-  @keyframes float2 {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(8px); }
+  .need-card:hover { background:var(--card2); }
+  .need-card::before {
+    content:''; position:absolute; top:0; left:0; width:3px; height:100%;
+    background:var(--green); transform:scaleY(0); transform-origin:top; transition:transform 0.3s ease;
   }
+  .need-card:hover::before { transform:scaleY(1); }
+  .need-num { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; color:var(--text3); margin-bottom:1rem; }
+  .need-title { font-family:'Fraunces',serif; font-size:1.1rem; font-weight:700; margin-bottom:0.6rem; }
+  .need-body { font-size:0.85rem; line-height:1.75; color:var(--text2); }
+  .need-tag { display:inline-block; margin-top:0.9rem; font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.1em; color:var(--green); background:var(--green-dim); border:1px solid rgba(34,197,94,0.2); padding:0.28rem 0.7rem; border-radius:2px; }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* ── SERVICES ── */
+  .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:3rem; }
+  .svc-card {
+    background:var(--card); border:1px solid var(--border); border-radius:4px;
+    padding:2rem 1.8rem; display:flex; flex-direction:column; transition:border-color 0.22s, transform 0.22s;
+    position:relative; overflow:hidden;
   }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  .svc-card:hover { border-color:rgba(34,197,94,0.35); transform:translateY(-4px); }
+  .svc-card.featured { border-color:rgba(34,197,94,0.4); background:rgba(34,197,94,0.04); }
+  .svc-badge {
+    display:inline-block; font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.14em;
+    text-transform:uppercase; background:var(--green); color:#07080a; padding:0.25rem 0.65rem; border-radius:2px;
+    margin-bottom:1.4rem; width:fit-content;
   }
-
-  /* SECTIONS */
-  section {
-    padding: 6rem 3rem;
-    max-width: 1100px;
-    margin: 0 auto;
+  .svc-name { font-family:'Fraunces',serif; font-size:1.2rem; font-weight:700; margin-bottom:0.6rem; }
+  .svc-desc { font-size:0.84rem; line-height:1.76; color:var(--text2); flex:1; margin-bottom:1.4rem; }
+  .svc-list { list-style:none; margin-bottom:1.6rem; display:flex; flex-direction:column; gap:6px; }
+  .svc-list li { font-size:0.82rem; color:var(--text2); display:flex; align-items:flex-start; gap:7px; line-height:1.5; }
+  .svc-list li::before { content:'✓'; color:var(--green); font-size:0.78rem; flex-shrink:0; margin-top:1px; }
+  .svc-price { font-family:'Fraunces',serif; font-size:1.5rem; font-weight:900; color:var(--green); }
+  .svc-price-sub { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.08em; color:var(--text3); margin-top:2px; }
+  .svc-cta {
+    display:inline-block; margin-top:1.4rem; text-align:center; text-decoration:none;
+    font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase;
+    padding:0.75rem; border-radius:3px; border:1px solid var(--border2); color:var(--text2); transition:all 0.2s; cursor:none;
   }
+  .svc-cta:hover { border-color:rgba(34,197,94,0.4); color:var(--green); background:var(--green-dim); }
+  .svc-card.featured .svc-cta { background:var(--green); color:#07080a; border-color:var(--green); }
+  .svc-card.featured .svc-cta:hover { opacity:0.88; }
 
-  .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+  /* ── PROCESS ── */
+  .process-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5px; margin-top:3rem; background:var(--border); border:1px solid var(--border); }
+  .step { background:var(--card); padding:2rem 1.7rem; }
+  .step-num { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; color:var(--text3); margin-bottom:1.2rem; }
+  .step-title { font-family:'Fraunces',serif; font-size:1rem; font-weight:700; margin-bottom:0.55rem; }
+  .step-body { font-size:0.82rem; line-height:1.72; color:var(--text2); }
+  .step-tool { display:inline-flex; align-items:center; gap:5px; margin-top:0.9rem; font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.1em; color:var(--amber); background:var(--amber-dim); border:1px solid rgba(34,197,94,0.28); padding:0.25rem 0.65rem; border-radius:2px; }
+
+  /* ── PORTFOLIO ── */
+  .port-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:2.5rem; }
+  .port-card {
+    background:var(--card); border:1px solid var(--border); border-radius:4px; overflow:hidden;
+    transition:transform 0.22s, box-shadow 0.22s; cursor:none;
   }
-  .section-label::before {
-    content: '';
-    width: 30px;
-    height: 1px;
-    background: var(--gold);
+  .port-card:hover { transform:translateY(-5px); box-shadow:0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,197,94,0.18); }
+  .port-thumb {
+    aspect-ratio:9/16; background:linear-gradient(155deg,#0d1a12,#0a1208);
+    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
   }
-
-  .section-title {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
-    line-height: 1.15;
-    margin-bottom: 1rem;
-  }
-
-  .section-title em {
-    color: var(--gold);
-    font-style: italic;
-  }
-
-  /* SERVICES */
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5px;
-    margin-top: 3rem;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-
-  .service-card {
-    background: var(--card);
-    padding: 2.5rem 2rem;
-    transition: background 0.25s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--gold);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-  }
-
-  .service-card:hover::before { transform: scaleX(1); }
-  .service-card:hover { background: #1a1a24; }
-
-  .service-icon {
-    font-size: 1.8rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .service-name {
-    font-family: 'Fraunces', serif;
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-bottom: 0.7rem;
-  }
-
-  .service-desc {
-    font-size: 0.85rem;
-    line-height: 1.7;
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-  }
-
-  .service-price {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--gold);
-    letter-spacing: 0.05em;
-  }
-
-  /* PORTFOLIO */
-  .portfolio-note {
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin-top: 0.5rem;
-    margin-bottom: 3rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
-  }
-
-  .portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-
-  .portfolio-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: transform 0.25s, box-shadow 0.25s;
-    cursor: none;
-  }
-
-  .portfolio-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(76,175,125,0.2);
-  }
-
-  .portfolio-thumb {
-    aspect-ratio: 9/16;
-    background: linear-gradient(160deg, #12121e, #1e1e30);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .portfolio-thumb::after {
-    content: '▶';
-    font-size: 1.5rem;
-    color: rgba(76,175,125,0.5);
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.3);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .portfolio-card:hover .portfolio-thumb::after { opacity: 1; }
-
-  .thumb-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    color: rgba(76,175,125,0.4);
-    text-align: center;
-    padding: 1rem;
-    text-transform: uppercase;
-  }
-
-  .portfolio-info {
-    padding: 1rem;
-    border-top: 1px solid var(--border);
-  }
-
-  .portfolio-title {
-    font-family: 'Fraunces', serif;
-    font-size: 0.9rem;
-    margin-bottom: 0.3rem;
-  }
-
-  .portfolio-meta {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  /* ABOUT */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: center;
-    margin-top: 3rem;
-  }
-
-  .about-text p {
-    font-size: 1rem;
-    line-height: 1.85;
-    color: rgba(232,230,223,0.7);
-    margin-bottom: 1.2rem;
-  }
-
-  .about-text strong { color: var(--text); font-weight: 500; }
-
-  .skills-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-top: 1.5rem;
-  }
-
-  .skill-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
-    color: var(--gold);
-    border: 1px solid rgba(76,175,125,0.25);
-    padding: 0.35rem 0.8rem;
-    border-radius: 2px;
-    background: var(--gold-dim);
-    text-transform: uppercase;
-  }
-
-  .about-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-
-  .about-stat {
-    background: var(--card);
-    padding: 2rem;
-    text-align: center;
-  }
-
-  .stat-number {
-    font-family: 'Fraunces', serif;
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: var(--gold);
-    display: block;
-    margin-bottom: 0.3rem;
-  }
-
-  .stat-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  /* CONTACT */
-  .contact-section {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 6rem 3rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .contact-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 50% 80% at 50% 50%, rgba(76,175,125,0.05) 0%, transparent 70%);
-  }
-
-  .contact-inner {
-    max-width: 600px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
-  }
-
-  .contact-links {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2.5rem;
-    flex-wrap: wrap;
-  }
-
-  .contact-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    transition: all 0.25s;
-    cursor: none;
-  }
-
-  .contact-link:hover {
-    color: var(--gold);
-    border-color: rgba(76,175,125,0.4);
-    background: var(--gold-dim);
-  }
-
-  /* FOOTER */
-  footer {
-    padding: 2rem 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 1px solid var(--border);
-  }
-
-  footer span {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-  }
-
-  /* DIVIDER */
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-    margin: 0 auto;
-  }
-
-  /* SCROLL REVEAL */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
-  }
-
-  @media (max-width: 768px) {
-    nav { padding: 1.2rem 1.5rem; }
-    .nav-links { display: none; }
-    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
-    .hero-right { display: none; }
-    section { padding: 4rem 1.5rem; }
-    .services-grid { grid-template-columns: 1fr; }
-    .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
-    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    .contact-section { padding: 4rem 1.5rem; }
-    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
-  }
-</style>
-</head>
-<body>
-
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">Pranay Netha</div>
-  <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#work">Work</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid-lines"></div>
-
-  <div class="hero-left">
-    <div class="hero-tag">Available for work</div>
-    <h1 class="hero-name"><span>Pranay</span><br>Netha.</h1>
-    <p class="hero-role">Finance Reel Editor · DaVinci Resolve</p>
-    <p class="hero-desc">I edit short-form reels for finance creators — sharp hooks, clean subtitles, fast pacing that keeps viewers watching till the end.</p>
-    <div class="hero-cta">
-      <a href="#contact" class="btn-primary">Hire Me →</a>
-      <a href="#work" class="btn-outline">View Work</a>
-    </div>
-  </div>
-
-  <div class="hero-right">
-    <div class="hero-visual">
-      <div class="floating-tag float-1">📈 Finance Niche</div>
-      <div class="phone-frame">
-        <div class="phone-screen" style="padding:14px 12px; gap:8px; justify-content:flex-start;">
-          <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
-            <span style="font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold);">This month</span>
-            <span style="font-family:'DM Mono',monospace; font-size:0.5rem; color:var(--muted);">May 2026</span>
-          </div>
-          <div style="text-align:center; padding:6px 0 2px; width:100%;">
-            <div style="font-family:'Fraunces',serif; font-size:2rem; font-weight:900; color:var(--gold); line-height:1;">2.4M</div>
-            <div style="font-family:'DM Mono',monospace; font-size:0.5rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-top:2px;">Total views</div>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; width:100%;">
-            <div style="background:#1a1a24; border-radius:6px; padding:7px 8px; border:1px solid #1e1e2e;">
-              <div style="font-family:'Fraunces',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">94%</div>
-              <div style="font-family:'DM Mono',monospace; font-size:0.45rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-top:1px;">Retention</div>
-              <div style="font-family:'DM Mono',monospace; font-size:0.45rem; color:#4caf7d; margin-top:2px;">↑ +12%</div>
-            </div>
-            <div style="background:#1a1a24; border-radius:6px; padding:7px 8px; border:1px solid #1e1e2e;">
-              <div style="font-family:'Fraunces',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">48h</div>
-              <div style="font-family:'DM Mono',monospace; font-size:0.45rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-top:1px;">Delivery</div>
-              <div style="font-family:'DM Mono',monospace; font-size:0.45rem; color:var(--gold); margin-top:2px;">On time</div>
-            </div>
-            <div style="background:#1a1a24; border-radius:6px; padding:7px 8px; border:1px solid #1e1e2e;">
-              <div style="font-family:'Fraunces',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">87K</div>
-              <div style="font-family:'DM Mono',monospace; font-size:0.45rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-top:1px;">Avg views</div>
-              <div style="font-family:'DM Mono',monospace; font-size:0.45rem; color:#4caf7d; margin-top:2px;">↑ +34%</div>
-            </div>
-            <div style="background:#1a1a24; border-radius:6px; padding:7px 8px; border:1px solid #1e1e2e;">
-              <div style="font-family:'Fraunces',serif; font-size:0.9rem; font-weight:700; color:#e8e6df;">5/5</div>
-              <div style="font-family:'DM Mono',monospace; font-size:0.45rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-top:1px;">Satisfaction</div>
-              <div style="font-family:'DM Mono',monospace; font-size:0.45rem; color:var(--gold); margin-top:2px;">★★★★★</div>
-            </div>
-          </div>
-          <div style="display:flex; align-items:flex-end; gap:3px; height:36px; width:100%; padding:0 2px;">
-            <div style="flex:1; height:45%; background:rgba(76,175,125,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(76,175,125,0.3);"></div>
-            <div style="flex:1; height:60%; background:rgba(76,175,125,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(76,175,125,0.3);"></div>
-            <div style="flex:1; height:40%; background:rgba(76,175,125,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(76,175,125,0.3);"></div>
-            <div style="flex:1; height:75%; background:rgba(76,175,125,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(76,175,125,0.3);"></div>
-            <div style="flex:1; height:90%; background:rgba(76,175,125,0.4); border-radius:2px 2px 0 0; border-top:1px solid var(--gold);"></div>
-            <div style="flex:1; height:65%; background:rgba(76,175,125,0.15); border-radius:2px 2px 0 0; border-top:1px solid rgba(76,175,125,0.3);"></div>
-            <div style="flex:1; height:100%; background:rgba(76,175,125,0.4); border-radius:2px 2px 0 0; border-top:1px solid var(--gold);"></div>
-          </div>
-        </div>
-      </div>
-      <div class="floating-tag float-2">✦ Fast delivery</div>
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- SERVICES -->
-<section id="services">
-  <div class="section-label">What I offer</div>
-  <h2 class="section-title reveal">Editing that makes<br><em>finance content convert.</em></h2>
-
-  <div class="services-grid reveal">
-    <div class="service-card">
-      <div class="service-icon">✂️</div>
-      <div class="service-name">Single Reel Edit</div>
-      <p class="service-desc">One short-form reel, fully edited — hook, cuts, subtitles, SFX, color grade, and export-ready in 1080x1920.</p>
-      <div class="service-price">Starting ₹800 / reel</div>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">📦</div>
-      <div class="service-name">Monthly Starter Pack</div>
-      <p class="service-desc">4 reels per month — ideal for creators posting 1x/week. Consistent delivery, consistent growth.</p>
-      <div class="service-price">₹3,500 / month</div>
-    </div>
-    <div class="service-card">
-      <div class="service-icon">🚀</div>
-      <div class="service-name">Monthly Retainer</div>
-      <p class="service-desc">10–12 reels per month for creators who post daily. Priority turnaround, dedicated editing system.</p>
-      <div class="service-price">₹8,000–12,000 / month</div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- PORTFOLIO -->
-<section id="work">
-  <div class="section-label">Portfolio</div>
-  <h2 class="section-title reveal">Recent <em>work.</em></h2>
-
-
-  <div class="portfolio-grid reveal">
-    <div class="portfolio-card">
-      <div class="portfolio-thumb">
-        <div class="thumb-label">Finance Reel<br>Sample #1</div>
-      </div>
-      <div class="portfolio-info">
-        <div class="portfolio-title">5 Money Mistakes in Your 20s</div>
-        <div class="portfolio-meta">Finance · 60s · Instagram Reel</div>
-      </div>
-    </div>
-    <div class="portfolio-card">
-      <div class="portfolio-thumb">
-        <div class="thumb-label">Finance Reel<br>Sample #2</div>
-      </div>
-      <div class="portfolio-info">
-        <div class="portfolio-title">SIP vs FD — Which Wins?</div>
-        <div class="portfolio-meta">Finance · 45s · YouTube Short</div>
-      </div>
-    </div>
-    <div class="portfolio-card">
-      <div class="portfolio-thumb">
-        <div class="thumb-label">Finance Reel<br>Sample #3</div>
-      </div>
-      <div class="portfolio-info">
-        <div class="portfolio-title">How to Start Investing at ₹500</div>
-        <div class="portfolio-meta">Finance · 55s · Instagram Reel</div>
-      </div>
-    </div>
-    <div class="portfolio-card">
-      <div class="portfolio-thumb">
-        <div class="thumb-label">Finance Reel<br>Sample #4</div>
-      </div>
-      <div class="portfolio-info">
-        <div class="portfolio-title">Coming Soon</div>
-        <div class="portfolio-meta">Finance · Talking Head · Reel</div>
-      </div>
-    </div>
-    <div class="portfolio-card">
-      <div class="portfolio-thumb">
-        <div class="thumb-label">Finance Reel<br>Sample #5</div>
-      </div>
-      <div class="portfolio-info">
-        <div class="portfolio-title">Coming Soon</div>
-        <div class="portfolio-meta">Finance · Talking Head · Reel</div>
-      </div>
-    </div>
-    <div class="portfolio-card">
-      <div class="portfolio-thumb">
-        <div class="thumb-label">Finance Reel<br>Sample #6</div>
-      </div>
-      <div class="portfolio-info">
-        <div class="portfolio-title">Coming Soon</div>
-        <div class="portfolio-meta">Finance · Talking Head · Reel</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-label">About</div>
-  <div class="about-grid">
-    <div class="about-text reveal">
-      <h2 class="section-title" style="margin-bottom:1.5rem;">Editing with<br><em>purpose.</em></h2>
-      <p>I'm Pranay Netha, a freelance short-form video editor based in India, specializing in content for <strong>finance creators, coaches, and personal brands.</strong></p>
-      <p>I work with <strong>DaVinci Resolve</strong> to craft reels that hold attention — fast hooks, rhythm-based cuts, clean subtitles, and color grades that feel premium without the noise.</p>
-      <p>My goal is simple: help finance creators <strong>show up consistently</strong> with content that looks professional, without spending hours on editing themselves.</p>
-      <div class="skills-list">
-        <span class="skill-tag">Fast Cuts</span>
-        <span class="skill-tag">Subtitles</span>
-        <span class="skill-tag">Color Grade</span>
-        <span class="skill-tag">SFX & Audio</span>
-        <span class="skill-tag">DaVinci Resolve</span>
-        <span class="skill-tag">Fusion</span>
-        <span class="skill-tag">Text Animation</span>
-        <span class="skill-tag">4K Export</span>
-      </div>
-    </div>
-
-    <div class="about-stats reveal">
-      <div class="about-stat">
-        <span class="stat-number">48h</span>
-        <span class="stat-label">Max Turnaround</span>
-      </div>
-      <div class="about-stat">
-        <span class="stat-number">∞</span>
-        <span class="stat-label">Finance Niche</span>
-      </div>
-      <div class="about-stat">
-        <span class="stat-number">4K</span>
-        <span class="stat-label">Export Quality</span>
-      </div>
-      <div class="about-stat">
-        <span class="stat-number">3×</span>
-        <span class="stat-label">Revision Rounds</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<div class="contact-section" id="contact">
-  <div class="contact-inner">
-    <div class="section-label" style="justify-content:center;">Get in touch</div>
-    <h2 class="section-title reveal" style="margin-bottom:0.8rem;">Ready to grow your<br><em>finance channel?</em></h2>
-    <p style="color:var(--muted); font-size:0.9rem; line-height:1.7;" class="reveal">Send me your raw footage or a reference reel. I'll deliver a clean, punchy edit within 48 hours.</p>
-    <div style="display:inline-flex; align-items:center; gap:0.6rem; background:var(--gold); color:#0a0a0f; font-family:'DM Mono',monospace; font-size:0.75rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; padding:0.7rem 1.4rem; border-radius:2px; margin-top:1.2rem;" class="reveal">
-      ★ First reel completely free — no strings attached
-    </div>
-
-    <div class="contact-links reveal">
-      <a href="mailto:pranaystake25@gmail.com" class="contact-link">
-        ✉ pranaystake25@gmail.com
-      </a>
-      <a href="https://instagram.com/pranays.take" target="_blank" class="contact-link">
-        ◈ @pranays.take
-      </a>
-      <a href="https://www.linkedin.com/in/pranay-netha-4097b7383/" target="_blank" class="contact-link">
-        in LinkedIn
-      </a>
-    </div>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <span>© 2026 Pranay Netha — Finance Reel Editor</span>
-  <span>Built to get hired.</span>
-</footer>
-
-<script>
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px';
-    cursor.style.top = my + 'px';
-  });
-
-  function animateRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx + 'px';
-    ring.style.top = ry + 'px';
-    requestAnimationFrame(animateRing);
-  }
-  animateRing();
-
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      ring.style.transform = 'translate(-50%, -50%) scale(1.6)';
-      ring.style.borderColor = 'rgba(76,175,125,0.7)';
-    });
-    el.addEventListener('mouseleave', () => {
-      ring.style.transform = 'translate(-50%, -50%) scale(1)';
-      ring.style.borderColor = 'rgba(76,175,125,0.4)';
-    });
-  });
-
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-
-  reveals.forEach(el => observer.observe(el));
-</script>
-</body>
-</html>
+  .thumb-content { padding:1rem; width:100%; display:flex; flex-direction:column; justify-content:space-between; height:100%; }
+  .thumb-tag { font-family:'DM Mono',monospace; font-size:0.52rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--green); opacity:0.7; }
+  .thumb-hook {
+    font-family:'Fraunces',serif; font-size:0.88rem; font-weight:700; color:var(--text); line-height:1.3;
+    text-align:center; padding:0 0.3
